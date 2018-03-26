@@ -1,0 +1,49 @@
+{extend name="layout/layout" /}
+
+{block name="content"}
+<div class="layui-col-md12">
+    <table class="layui-table">
+        <colgroup>
+            <col width="150">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+        <tr>
+            <th>订单号</th>
+            <th>订单商品</th>
+            <th>ip</th>
+            <th>抢购时间</th>
+            <th>备注</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $orders as $key=>$vo }
+        <tr>
+            <td>{$vo->order_id}</td>
+            <td>{$vo->goods->name}</td>
+            <td>{$vo->ip}</td>
+            <td>{$vo->create_at}</td>
+            <td>{$vo->temp}</td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    <div id="laypage"></div>
+</div>
+<script>
+    var url = '{:url("/order")}';
+    laypage({
+        cont: 'laypage', //容器。值支持id名、原生dom对象，jquery对象,
+        pages: '{$pageTotal}', //总页数
+        skin: '#5FB878', //皮肤
+        curr: '{$curr}',
+        jump: function (e, first) { //触发分页后的回调
+            if (!first) { //一定要加此判断，否则初始时会无限刷新
+                //alert(url+'?page='+e.curr);
+                location.href = url + '?page=' + e.curr
+            }
+        }
+    });
+</script>
+{/block}

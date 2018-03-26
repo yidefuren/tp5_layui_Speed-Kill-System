@@ -1,0 +1,72 @@
+{extend name="layout/layout1" /}
+
+
+{block name="content"}
+<form class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">订单号</label>
+        <div class="layui-input-block">
+            <input type="text" name="order_id" required lay-verify="required" placeholder="请输入商品名称" autocomplete="off"
+                   class="layui-input" value="{$order['order_id']}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品id</label>
+        <div class="layui-input-block">
+            <input type="number" name="gid" required lay-verify="required" placeholder="请输入商品数量" autocomplete="off"
+                   class="layui-input" value="{$order['gid']}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">ip</label>
+        <div class="layui-input-block">
+            <input type="text" name="ip" required lay-verify="required" placeholder="ip" autocomplete="off"
+                   class="layui-input" value="{$order['ip']}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <input id="update_id" type="hidden" name="id" value="{$order['id']}">
+            <button class="layui-btn" lay-submit lay-filter="add">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    //Demo
+    layui.use(['upload', 'form'], function () {
+        var form = layui.form;
+        var upload = layui.upload;
+        //监听提交
+        form.on('submit(add)', function (data) {
+
+            if (data.field.order_id == '') {
+                layer.msg("订单号不能为空");
+                return false;
+            }
+            if (data.field.gid == '') {
+                layer.msg("商品id不能为空");
+                return false;
+            }
+
+            if (data.field.ip == '') {
+                layer.msg("ip不能为空");
+                return false;
+            }
+            $.post("/admin/orders/store", data.field, function (res) {
+                if (res.code == 0) {
+                    layer.alert(res.msg, function (index) {
+                        window.location.href = '/admin/orders/index';
+                    });
+                } else {
+                    layer.msg(res.msg)
+                }
+            }, 'json');
+            return false;
+        });
+
+
+    });
+</script>
+{/block}

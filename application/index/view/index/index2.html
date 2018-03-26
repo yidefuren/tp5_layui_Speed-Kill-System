@@ -1,0 +1,53 @@
+{extend name="layout/layout" /}
+
+{block name="content"}
+<div class="layui-col-md12">
+    <ul class="m-list">
+        {foreach $goods as $key=>$vo }
+        <li>
+            <div class="wrap">
+                <img src="/uploads/{$vo->thumb}" alt="" width="180px" height="180px">
+                <div class="info">
+                    <a class="title">{$vo->name|jiequ}</a>&nbsp;&nbsp;
+                    <span class="price">¥{$vo->price}</span>
+                </div>
+                <button class="layui-btn layui-btn-normal layui-btn-xs" onclick="kill('{$vo->id}')"
+                        data-id="{$vo->id}">抢购
+                </button>
+            </div>
+        </li>
+        {/foreach}
+    </ul>
+    <div id="laypage"></div>
+</div>
+<script>
+    var url = '{:url("/redis")}';
+    laypage({
+        cont: 'laypage', //容器。值支持id名、原生dom对象，jquery对象,
+        pages: '{$pageTotal}', //总页数
+        skin: '#5FB878', //皮肤
+        curr: '{$curr}',
+        jump: function (e, first) { //触发分页后的回调
+            if (!first) { //一定要加此判断，否则初始时会无限刷新
+                //alert(url+'?page='+e.curr);
+                location.href = url + '?page=' + e.curr
+            }
+        }
+    });
+    function kill(gid) {
+        var url2 = '{:url("/redis_kill")}';
+        $.ajax({
+            url: url2,
+            type: 'post',
+            data: {'gid': gid},
+            success: function (result) {
+                var result = $.parseJSON(result);
+                layui.use('layer', function () {
+                    var layer = layui.layer;
+                    layer.msg(result.msg);
+                });
+            }
+        });
+    }
+</script>
+{/block}

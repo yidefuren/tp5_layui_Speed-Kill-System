@@ -1,0 +1,93 @@
+{extend name="layout/layout1" /}
+
+{block name="content"}
+<div class="layui-row">
+    <div class="layui-col-md12">
+        <div class="layui-card">
+            <div class="layui-card-header">商品列表</div>
+            <div class="layui-card-body">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="150">
+                        <col width="200">
+                        <col>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>商品id</th>
+                        <th>商品名称</th>
+                        <th>价格</th>
+                        <th>mysql库存</th>
+                        <th>redis库存</th>
+                        <th>添加时间</th>
+                        <th>
+                            <div class="layui-table-cell laytable-cell-1-10" align="center"><span></span></div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name="goods" id="vo"}
+                    <tr>
+                        <td>
+                            <div class="layui-table-cell">{$vo->id}</div>
+                        </td>
+                        <td>
+                            <div class="layui-table-cell">{$vo->name|jiequ}</div>
+                        </td>
+                        <td>
+                            <div class="layui-table-cell">{$vo->price}</div>
+                        </td>
+                        <td>
+                            <div class="layui-table-cell">{$vo->counts}</div>
+                        </td>
+                        <td>
+                            <div class="layui-table-cell">{$vo->redis_counts}</div>
+                        </td>
+                        <td>
+                            <div class="layui-table-cell">{$vo->create_at}</div>
+                        </td>
+                        <td align="center" data-off="true">
+                            <div class="layui-table-cell laytable-cell-1-10"><a
+                                    class="layui-btn layui-btn-xs" href="{:url('/admin/goods/add')}?id={$vo->id}">编辑</a> <a
+                                    class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a></div>
+                        </td>
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+                <div id="laypage"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/laypage.js"></script>
+<script>
+    var k_url = '{:url("/admin/goods/index")}';
+    laypage({
+        cont: 'laypage', //容器。值支持id名、原生dom对象，jquery对象,
+        pages: '{$pageTotal}', //总页数
+        skin: '#5FB878', //皮肤
+        curr: '{$curr}',
+        jump: function (e, first) { //触发分页后的回调
+            if (!first) { //一定要加此判断，否则初始时会无限刷新
+                //alert(url+'?page='+e.curr);
+                location.href = k_url + '?page=' + e.curr
+            }
+        }
+    });
+//    layui.use('laypage', function () {
+//        var laypage = layui.laypage;
+//        laypage.render({
+//            elem: 'page' //注意不用加 # 号
+//            , count: '{$pageTotal}' //数据总数，从服务端得到
+//            , curr: '{$curr}'
+//            , jump: function (obj, first) {
+//                if (!first) {
+//                    location.href = url + '?page=' + obj.curr
+//                }
+//            }
+//        });
+//    })
+</script>
+<!--<script src="/static/js/myPage.js"></script>-->
+{/block}
