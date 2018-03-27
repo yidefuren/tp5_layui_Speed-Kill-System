@@ -68,13 +68,13 @@ class Kill extends Base
 
         // 会出现超卖
         if ($len > $goodInfo['redis_counts']) {
-            show_msg('1', '已经抢光了1', '');
+            show_msg('1', '已经抢光了', '');
         }
         // lpop是移除并返回列表的第一个元素，模拟抢购
         $count = $redis->getHandle()->lpop($key);
 
         if (!$count) {
-            show_msg('1', '已经抢光了2', '');
+            show_msg('1', '已经抢光了', '');
         }
         $res = Orders::createOrder($gid, 2);
         if (!$res) {

@@ -22,7 +22,7 @@
         <tr>
             <td>{$vo->order_id}</td>
             <td>{$vo->goods->name}</td>
-            <td>{$vo->ip}</td>
+            <td>{$vo->ip|ipToStar}</td>
             <td>{$vo->create_at}</td>
             <td>{$vo->temp}</td>
         </tr>

@@ -73,3 +73,11 @@ function jiequ($str, $length = 15)
     // 中文 2 个字节，英文 1 个字节
     return mb_strimwidth(trim(htmlspecialchars_decode($str)), 0, $length, '...', 'utf-8');
 }
+
+
+function ipToStar($ip)
+{
+    if (empty($ip))
+        return "";
+    return preg_replace('/(\d+)\.(\d+)\.(\d+)\.(\d+)/is', "$1.$2.*.*", $ip);
+}

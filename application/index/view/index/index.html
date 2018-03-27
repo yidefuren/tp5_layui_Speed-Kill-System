@@ -38,6 +38,7 @@
         var url = '{:url("/kill")}';
         $.ajax({
             url: url,
+            type: 'post',
             data: {'gid': gid},
             success: function (result) {
                 var result = $.parseJSON(result);
